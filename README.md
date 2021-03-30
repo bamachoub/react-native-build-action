@@ -1,8 +1,15 @@
-# ga-react-native-build
+# React Native Build Action
 
-| with        | value                  |
-| ----------- | :--------------------- |
-| plartform   | `android`              |
-| type        | `bundle \| assemble`   |
-| on          | `push \| pull_request` |
-| to          | `[branch]`             |
+### Secrets Required
+
+**SIGNING_KEY** is sha256 encoded of keystore file.
+**STORE_PASSWORD** is keystore password
+**KEY_PASSWORD** is upload key password
+
+### Action Inputs
+
+| name          | accepted values         | default    |
+| :------------ | :---------------------- | :--------- |
+| plartform     | `android`               | `android`  |
+| type          | `bundle | assemble`     | `assemble` |
+| keystore-name | key store file name     | `release`  |

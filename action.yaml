@@ -1,39 +1,39 @@
-name: React Native Build
-description: "Builds react native app for android platform"
-on:
-  pull_request:
-    branches:
-      -main
-jobs:
-  install-and-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install npm dependencies
-        run: |
-          npm install
-      - name: Run tests
-        run: |
-          npm test
-  build-android:
-    needs: install-and-test 
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: recursive
-      - name: Install npm dependencies
-        run: |
-          npm install
-      - name: Build Android Release
-        run: |
-          echo $SIGNING_KEY | base64 -d > ${{ github.workspace }}/android/app/bamachoub-app.keystore
-          cd android && ./gradlew bundleRelease
-        env:
-          dirname: ${{ github.workspace }}
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: app-release
-          path: android/app/build/outputs/apk/release/*.apk
+name: 'React Native Build'
+description: 'Builds react native app for android platform'
+inputs:
+  platform:
+    description: 'Platform to build'
+    required: false
+    default: 'android'
+  type:
+    description: 'Type can be any of: build | assemble'
+    required: false
+    default: 'assemble'
+  keystore-name:
+    description: 'Keystore file name'
+    required: true
+    default: 'release'
+outputs:
+  time: # id of output
+    description: 'The time started'
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Install npm dependencies
+      run: |
+        npm install
+    - name: Build Release
+      run: |
+        echo $SIGNING_KEY | base64 -d > /android/app/${{ inputs.keystore-name }}.keystore
+        cd android && ./gradlew ${{ inputs.type }}Release -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.STORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.KEY_PASSWORD }}'
+      env:
+        dirname: ${{ github.workspace }}
+        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-release
+        path: android/app/build/outputs/apk/release/*.apk
