@@ -1,7 +1,7 @@
 name: 'React Native Build'
 description: 'Builds react native app for android platform'
 icon: 'box'
-color: '#E1722D'
+color: 'orange'
 inputs:
   platform:
     description: 'Platform to build'
