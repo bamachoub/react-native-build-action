@@ -22,21 +22,12 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: recursive
     - name: Install npm dependencies
       run: |
         npm install
+      shell: bash
     - name: Build Release
       run: |
         echo $SIGNING_KEY | base64 -d > /android/app/${{ inputs.keystore-name }}.keystore
         cd android && ./gradlew ${{ inputs.type }}Release -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.STORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.KEY_PASSWORD }}'
-      env:
-        dirname: ${{ github.workspace }}
-        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: app-release
-        path: android/app/build/outputs/apk/release/*.apk
+      shell: bash
