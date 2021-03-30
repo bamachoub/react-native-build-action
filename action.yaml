@@ -29,5 +29,5 @@ runs:
     - name: Build Release
       run: |
         echo $SIGNING_KEY | base64 -d > /android/app/${{ inputs.keystore-name }}.keystore
-        cd android && ./gradlew ${{ inputs.type }}Release -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.STORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.KEY_PASSWORD }}'
+        cd android && ./gradlew ${{ inputs.type }}Release -PMYAPP_UPLOAD_STORE_PASSWORD='${{ env.STORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ env.KEY_PASSWORD }}'
       shell: bash

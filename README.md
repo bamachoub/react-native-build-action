@@ -1,6 +1,6 @@
 # React Native Build Action
 
-### Secrets Required
+### Env Vars Required
 
 **SIGNING_KEY** is sha256 encoded of keystore file.  
 **STORE_PASSWORD** is keystore password  
