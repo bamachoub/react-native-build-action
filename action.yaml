@@ -1,0 +1,39 @@
+name: React Native Build
+description: "Builds react native app for android platform"
+on:
+  pull_request:
+    branches:
+      -main
+jobs:
+  install-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install npm dependencies
+        run: |
+          npm install
+      - name: Run tests
+        run: |
+          npm test
+  build-android:
+    needs: install-and-test 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Install npm dependencies
+        run: |
+          npm install
+      - name: Build Android Release
+        run: |
+          echo $SIGNING_KEY | base64 -d > ${{ github.workspace }}/android/app/bamachoub-app.keystore
+          cd android && ./gradlew bundleRelease
+        env:
+          dirname: ${{ github.workspace }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release
+          path: android/app/build/outputs/apk/release/*.apk
