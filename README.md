@@ -2,9 +2,9 @@
 
 ### Secrets Required
 
-**SIGNING_KEY** is sha256 encoded of keystore file.
-**STORE_PASSWORD** is keystore password
-**KEY_PASSWORD** is upload key password
+**SIGNING_KEY** is sha256 encoded of keystore file.  
+**STORE_PASSWORD** is keystore password  
+**KEY_PASSWORD** is upload key password  
 
 ### Action Inputs
 
